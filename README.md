@@ -11,11 +11,12 @@ Compile the source code and add to your PATH.
 - `godbolt-cli file.extension`
 - `godbolt-cli test.c`
 - `godbolt-cli https://raw.githubusercontent.com/dfellis/llvm-hello-world/master/helloWorld.ll`
+- `godbolt-cli https://raw.githubusercontent.com/dfellis/llvm-hello-world/master/helloWorld.ll output.txt`
 
 ## Supported Languages
 
 - [Languages Map](https://gitlab.com/aiocat/godbolt-cli/-/blob/main/compiler.go#L14)
-  ``
+
 
 ## License
 

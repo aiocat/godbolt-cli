@@ -114,7 +114,7 @@ func (c *Compiler) GetSource() {
 	}
 }
 
-func (c *Compiler) Run() {
+func (c *Compiler) Run() []byte {
 	jsonFormat := []byte("{\"source\": " + fmt.Sprintf("%q", c.Source) + ",\"compiler\": \"" + c.Compiler + "\",\"options\": {\"userArguments\": \"\",\"executeParameters\": {\"args\": \"\",\"stdin\": \"\"},\"compilerOptions\": {\"executorRequest\": true,\"skipAsm\": true},\"filters\": {\"execute\": true},\"tools\": [],\"libraries\": []},\"lang\": \"" + c.Language + "\",\"allowStoreCodeDebug\": true}")
 
 	request, err := http.NewRequest("POST", GODBOLT_API+"compiler/"+c.Compiler+"/compile", bytes.NewBuffer(jsonFormat))
@@ -135,5 +135,5 @@ func (c *Compiler) Run() {
 	defer response.Body.Close()
 
 	body, _ := ioutil.ReadAll(response.Body)
-	fmt.Println(string(body))
+	return body
 }

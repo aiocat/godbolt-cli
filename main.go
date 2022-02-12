@@ -1,6 +1,9 @@
 package main
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 const GODBOLT_API = "https://godbolt.org/api/"
 
@@ -10,6 +13,13 @@ func main() {
 	}
 
 	fileName := os.Args[1]
+	var outputFile string
+
+	if len(os.Args) > 2 {
+		outputFile = os.Args[2]
+	} else {
+		outputFile = ""
+	}
 
 	compiler := new(Compiler)
 	compiler.FileName = fileName
@@ -17,5 +27,10 @@ func main() {
 	compiler.GetSource()
 	compiler.GetCompiler()
 
-	compiler.Run()
+	body := compiler.Run()
+	if outputFile == "" {
+		fmt.Printf("%s\n", body)
+	} else {
+		os.WriteFile(outputFile, body, os.ModeAppend)
+	}
 }
