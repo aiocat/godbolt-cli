@@ -24,7 +24,7 @@ var COMPILER_SOURCES = map[string]string{
 	"haskell":  "ghc921",
 	"java":     "java1700",
 	"kotlin":   "kotlinc1610",
-	"llvm":     "llctrunk",
+	"llvm":     "irclangtrunk",
 	"nim":      "nim160",
 	"python":   "python310",
 	"ruby":     "ruby302",
@@ -72,7 +72,7 @@ func (c *Compiler) GetCompiler() {
 	case "hrl":
 		c.Language = "erlang"
 	case "ll":
-		c.Language = "ll"
+		c.Language = "llvm"
 	case "py":
 		c.Language = "python"
 	case "rb":
