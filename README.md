@@ -3,8 +3,9 @@
 Godbolt console wrapper for easily execute local file without any security risk and compiler.
 
 ## Install
-
-Compile the source code and add to your PATH.
+- Compile the source code and add to your PATH.
+OR
+- `go install gitlab.com/aiocat/godbolt-cli@latest`
 
 ## Usage
 
