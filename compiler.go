@@ -10,10 +10,28 @@ import (
 	"strings"
 )
 
-const GODBOLT_API = "https://godbolt.org/api/compiler/"
-
 var COMPILER_SOURCES = map[string]string{
-	"c": "cg112",
+	"c":        "cg112",
+	"csharp":   "dotnet601csharp",
+	"assembly": "nasm21402",
+	"c++":      "g112",
+	"crystal":  "crystal131",
+	"d":        "ldc1_27",
+	"dart":     "dart2144",
+	"erlang":   "erl2416",
+	"fsharp":   "dotnet601fsharp",
+	"go":       "gl1170",
+	"haskell":  "ghc921",
+	"java":     "java1700",
+	"kotlin":   "kotlinc1610",
+	"llvm":     "llctrunk",
+	"nim":      "nim160",
+	"python":   "python310",
+	"ruby":     "ruby302",
+	"rust":     "r1580",
+	"scala":    "scalac2136",
+	"swift":    "swift55",
+	"zig":      "z090",
 }
 
 type Compiler struct {
@@ -23,6 +41,45 @@ type Compiler struct {
 func (c *Compiler) GetCompiler() {
 	extension := filepath.Ext(c.FileName)
 	c.Language = strings.ToLower(extension)[1:]
+
+	switch c.Language {
+	case "h":
+		c.Language = "c"
+	case "hs":
+		c.Language = "haskell"
+	case "cpp":
+		c.Language = "c++"
+	case "cxx":
+		c.Language = "c++"
+	case "hpp":
+		c.Language = "c++"
+	case "hxx":
+		c.Language = "c++"
+	case "ixx":
+		c.Language = "c++"
+	case "cs":
+		c.Language = "csharp"
+	case "fs":
+		c.Language = "fsharp"
+	case "asm":
+		c.Language = "assembly"
+	case "s":
+		c.Language = "assembly"
+	case "cr":
+		c.Language = "crystal"
+	case "erl":
+		c.Language = "erlang"
+	case "hrl":
+		c.Language = "erlang"
+	case "ll":
+		c.Language = "ll"
+	case "py":
+		c.Language = "python"
+	case "rb":
+		c.Language = "ruby"
+	case "rs":
+		c.Language = "rust"
+	}
 
 	if value, res := COMPILER_SOURCES[c.Language]; res {
 		c.Compiler = value
@@ -60,7 +117,7 @@ func (c *Compiler) GetSource() {
 func (c *Compiler) Run() {
 	jsonFormat := []byte("{\"source\": " + fmt.Sprintf("%q", c.Source) + ",\"compiler\": \"" + c.Compiler + "\",\"options\": {\"userArguments\": \"\",\"executeParameters\": {\"args\": \"\",\"stdin\": \"\"},\"compilerOptions\": {\"executorRequest\": true,\"skipAsm\": true},\"filters\": {\"execute\": true},\"tools\": [],\"libraries\": []},\"lang\": \"" + c.Language + "\",\"allowStoreCodeDebug\": true}")
 
-	request, err := http.NewRequest("POST", GODBOLT_API+c.Compiler+"/compile", bytes.NewBuffer(jsonFormat))
+	request, err := http.NewRequest("POST", GODBOLT_API+"compiler/"+c.Compiler+"/compile", bytes.NewBuffer(jsonFormat))
 
 	if err != nil {
 		panic(err)
