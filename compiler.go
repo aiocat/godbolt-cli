@@ -32,13 +32,29 @@ func (c *Compiler) GetCompiler() {
 }
 
 func (c *Compiler) GetSource() {
-	bytes, err := os.ReadFile(c.FileName)
+	if strings.HasPrefix(c.FileName, "http://") || strings.HasPrefix(c.FileName, "https://") {
+		response, err := http.Get(c.FileName)
+		if err != nil {
+			panic(err)
+		}
 
-	if err != nil {
-		panic(err)
+		defer response.Body.Close()
+
+		bytes, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			panic(err)
+		}
+
+		c.Source = string(bytes)
+	} else {
+		bytes, err := os.ReadFile(c.FileName)
+
+		if err != nil {
+			panic(err)
+		}
+
+		c.Source = string(bytes)
 	}
-
-	c.Source = string(bytes)
 }
 
 func (c *Compiler) Run() {
